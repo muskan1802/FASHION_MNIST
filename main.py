@@ -44,6 +44,16 @@ for i in range(9):
     plt.imshow(x_train[i].reshape(28,28), cmap='Greys')
 
 #Build 1st model.
+# Here we are doing conv2d layer with input image size of 28,28,1.
+# Then 32 hidden neurons
+# Then Maxpool2d layer for finding max value from strides of size(2,2)
+# Flattening it
+# Then adding 128 hidden neurons
+# Then adding 10 hidden neurons
+# Then compiling using accuracy metrics with activation categorical_crossentropy for multiclass labels and finally using optimizer
+# as Adam for minimising loss it is a stochastic gradient descent method that is based on adaptive estimation of first-order and second-order moments
+# This method is "computationally efficient, has little memory requirement, invariant to diagonal rescaling of gradients, and is well suited for problems 
+# that are large in terms of data/parameters"
 model = Sequential()
 model.add(Conv2D(32,3, activation='relu',padding='same', input_shape=(28, 28,1)))
 model.add(Conv2D(32,3,padding='same', activation='relu'))
@@ -57,6 +67,15 @@ model.summary()
 result1=model.fit(x_train, y_train,batch_size=128, epochs=20)
 
 #Build 2nd model.
+# Here we are doing conv2d layer with input image size of 28,28,1.
+# Then 32 hidden neurons
+# Then Maxpool2d layer for finding max value from strides of size(2,2)
+# Flattening it
+# Then adding 128 hidden neurons
+# Then adding 10 hidden neurons
+# Then compiling using accuracy metrics with activation categorical_crossentropy for multiclass labels and finally using optimizer
+# as RMSprop algorithm for minimising loss which is to Maintain a moving (discounted) average of the square of gradients and to divide the gradient by the root of this average
+# It uses plain momentum, not Nesterov momentum.
 model = Sequential()
 model.add(Conv2D(32,3, activation='relu',padding='same', input_shape=(28, 28,1)))
 model.add(Conv2D(32,3,padding='same', activation='relu'))
@@ -68,6 +87,8 @@ model.compile(optimizer='rmsprop',loss='categorical_crossentropy', metrics=['acc
 model.summary()
 
 #model fitting
+#We call fit(), which will train the model by slicing the data into "batches" of size batch_size, 
+# and repeatedly iterating over the entire dataset for a given number of epochs.
 result2=model.fit(x_train, y_train,batch_size=128, epochs=20)
 
 #Evaluate the two models by using two metrics, loss and accuracy.
@@ -80,6 +101,7 @@ for i in range(len(metrics)):
     #set subplots to show the result
     plt.subplot(1, 2, i+1)
     #Titles of subplots are "loss" and "accuracy"
+    #The returned history object holds a record of the loss values and metric values during training     
     plt.title(metric)
     plt_result1 = result1.history[metric]
     plt_result2 = result2.history[metric]
@@ -102,10 +124,10 @@ list1=[]
 list2=[]
 [list2.append(i) for i in names]
 dic = dict(zip(list1, list2))
-#Let's check the result.
+#Here we check the result.
 print("The answer is",dic[np.argmax(prediction)],"!")
 
-#Let's predict whole test data!
+#Predicts the whole test data!
 predictions = model.predict(x_test)
 results = np.argmax(predictions,axis=1)
 results = pd.Series(results, name="Label")
